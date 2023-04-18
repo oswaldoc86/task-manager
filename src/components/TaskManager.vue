@@ -46,7 +46,7 @@ export default {
   name: "TaskManager",
   data() {
     return {
-      message: "Lista de tareas 2",
+      message: "Lista de tareas",
       tasks: [
         { id: 1, name: "Hacer la compra" },
         { id: 2, name: "Ir al gimnasio" },
