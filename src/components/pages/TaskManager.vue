@@ -1,49 +1,19 @@
 <template>
   <div class="taskList">
-    <h1>{{ message }}</h1>
-    <ul>
-      <li v-for="task in tasks" :key="task.id">
-        <p>{{ task.name }}</p>
-        <button class="edit" @click="editTask(task)">Editar</button>
-        <button class="delete" @click="deleteTask(task.id)">Eliminar</button>
-      </li>
-    </ul>
-
-    <div class="button-wrapper" v-if="!editedTask">
-      <input
-        class="input-tarea"
-        v-model="newTask"
-        type="text"
-        placeholder="Agregar nueva tarea"
-      />
-      <button @click="addTask">Agregar</button>
-      <button class="delete" @click="clearTasks">Vaciar lista</button>
-    </div>
-
-    <div class="button-wrapper" v-else>
-      <input
-        class="input-tarea"
-        v-model="newTask"
-        type="text"
-        placeholder="Editar tarea"
-      />
-      <button @click="updateTask">Guardar</button>
-      <button
-        class="cancel"
-        @click="
-          editedTask = null;
-          newTask = '';
-        "
-      >
-        Cancelar
-      </button>
-    </div>
+    <ListItems :tasks="tasks" :message="message" @editTask="editTask($event)"  @deleteTask="deleteTask($event)"></ListItems>
+    <ManageList :editedTask="editedTask" @addTask="addTask($event)" @updateTask="updateTask($event)" @clearTasks="clearTasks()" @cancelActions="cancelActions()"></ManageList>
   </div>
 </template>
 
 <script>
+import ManageList from "../widgets/ManageList.vue";
+import ListItems from "../widgets/List.vue";
 export default {
   name: "TaskManager",
+  components: {
+    ManageList,
+    ListItems
+  },
   data() {
     return {
       message: "Lista de tareas ",
@@ -59,7 +29,6 @@ export default {
   methods: {
     clearTasks() {
       this.tasks = [];
-      console.log(this.tasks);
     },
     editTask(task) {
       this.editedTask = task;
@@ -68,7 +37,8 @@ export default {
     deleteTask(id) {
       this.tasks = this.tasks.filter((task) => task.id !== id);
     },
-    updateTask() {
+    updateTask(event) {
+      this.newTask = event;
       const taskIndex = this.tasks.findIndex(
         (task) => task.id === this.editedTask.id
       );
@@ -76,7 +46,8 @@ export default {
       this.newTask = "";
       this.editedTask = null;
     },
-    addTask() {
+    addTask(event) {
+      this.newTask = event;
       if (this.editedTask) {
         this.updateTask();
       } else {
@@ -85,6 +56,9 @@ export default {
         this.newTask = "";
       }
     },
+    cancelActions(){
+      this.editedTask = null
+    }
   },
 };
 </script>

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import TaskManager from "./components/TaskManager.vue";
+import TaskManager from "./components/pages/TaskManager.vue";
 export default {
   name: "App",
   components: {
